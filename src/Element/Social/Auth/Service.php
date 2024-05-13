@@ -1,6 +1,6 @@
 <?php
 
-namespace Auth;
+namespace Element\Social\Auth;
 
 use GuzzleHttp\Client;
 

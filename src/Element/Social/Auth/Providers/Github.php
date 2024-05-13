@@ -1,8 +1,8 @@
 <?php
 
-namespace Auth\Providers;
+namespace Element\Social\Auth\Providers;
 
-use Auth\Service;
+use Element\Social\Auth\Service;
 
 use GuzzleHttp\Exception\GuzzleException;
 
