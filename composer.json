@@ -1,0 +1,30 @@
+{
+    "name": "element/social",
+    "description": "Social auth package for Element",
+    "keywords": ["Tiny-Rebels", "element", "framework", "slim3", "MVC", "PHP-7", "Vue3", "Webpack", "SCSS", "Bootstrap3", "Twig", "JS", "NPM", "Composer"],
+    "type": "library",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Stefan Korfitz",
+            "email": "stefan@korfitz.com"
+        }
+    ],
+    "support": {
+        "email": "stefan@korfitz.com"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        },
+        "sort-packages": true
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Element\\Social\\": "src/"
+        }
+    }
+}
