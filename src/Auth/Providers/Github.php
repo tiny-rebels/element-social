@@ -1,8 +1,8 @@
 <?php
 
-namespace Element\Social\Auth\Providers;
+namespace Auth\Providers;
 
-use Element\Social\Auth\Service;
+use Auth\Service;
 
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -15,22 +15,25 @@ use GuzzleHttp\Exception\GuzzleException;
 class Github extends Service {
 
     /**
+     * @param $client_id
+     * @param $redirect_uri
+     *
      * @return string
      */
-    public function getAuthorizeUrl() {
+    public function getAuthorizeUrl($client_id, $redirect_uri): string {
 
         try {
 
             return "https://github.com/login/oauth/authorize?client_id="
-                . $this->config->get('sso.gh.client_id')
+                . $client_id
                 . "&redirect_uri="
-                . $this->config->get('sso.gh.redirect_uri')
+                . $redirect_uri
                 . "&scopes=user,user:email"
                 . "&state=" . bin2hex(random_bytes(16));
 
-        } catch (\Exception $e) {
+        } catch (\Exception $error) {
 
-            return $e;
+            return $error->getMessage();
         }
     }
 

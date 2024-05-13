@@ -1,6 +1,6 @@
 <?php
 
-namespace Element\Social\Auth;
+namespace Auth;
 
 use GuzzleHttp\Client;
 
@@ -18,20 +18,18 @@ abstract class Service
      * Service constructor.
      *
      * @param Client $client
-     * @param array $config
      */
-    public function __construct(Client $client, $config) {
+    public function __construct(Client $client) {
 
         $this->client = $client;
-        $this->config = $config;
     }
 
-    abstract public function getAuthorizeUrl();
+    abstract public function getAuthorizeUrl($client_id, $redirect_uri);
     abstract public function getUserByCode($code);
 
-    public function authorizeUrl() {
+    public function authorizeUrl($client_id, $redirect_uri) {
 
-        return $this->getAuthorizeUrl();
+        return $this->getAuthorizeUrl($client_id, $redirect_uri);
     }
 
     public function getUser($code) {
