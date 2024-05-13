@@ -20,17 +20,17 @@ class Authenticator {
 
     public function loginWithGithub() {
 
-        $clientID       = $this->config['users']['model'];
-        $redirectUri    = $this->config['roles']['model'];
+        $client_id      = $this->config['gh']['client_id'];
+        $redirect_uri   = $this->config['gh']['client_secret'];
 
         try {
 
-            Github::class->authorizeUrl('', '');
+            Github::class->authorizeUrl($client_id, $redirect_uri);
 
         } catch (Exception $error) {
 
             //...do something
-
+            die($error);
         }
     }
 }
