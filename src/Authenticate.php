@@ -9,7 +9,7 @@ use Element\Social\Auth\{
     Providers\Github
 };
 
-class Authenticator {
+class Authenticate {
 
     public function __construct($config = null) {
 
