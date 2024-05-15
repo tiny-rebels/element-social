@@ -4,25 +4,7 @@ namespace Element\Social\Auth;
 
 use GuzzleHttp\Client;
 
-abstract class Service
-{
-
-    /**
-     * The client instance.
-     *
-     * @var Client
-     */
-    protected $client;
-
-    /**
-     * Service constructor.
-     *
-     * @param Client $client
-     */
-    public function __construct(Client $client) {
-
-        $this->client = $client;
-    }
+abstract class Service {
 
     abstract public function getAuthorizeUrl($client_id, $redirect_uri);
     abstract public function getUserByCode($code);

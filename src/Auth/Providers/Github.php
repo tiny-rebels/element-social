@@ -3,7 +3,6 @@
 namespace Element\Social\Auth\Providers;
 
 use Element\Social\Auth\Service;
-
 use GuzzleHttp\Exception\GuzzleException;
 
 /*

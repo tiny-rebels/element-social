@@ -1,7 +1,13 @@
 <?php
 
-use Auth\Providers\Github;
-use Auth\Config;
+namespace Element\Social;
+
+use Exception;
+
+use Element\Social\Auth\{
+    Config,
+    Providers\Github
+};
 
 class Authenticator {
 
@@ -18,14 +24,18 @@ class Authenticator {
         }
     }
 
-    public function loginWithGithub() {
+    public static function withGithub() {
 
-        $client_id      = $this->config['gh']['client_id'];
-        $redirect_uri   = $this->config['gh']['client_secret'];
+        $config = new Config();
+
+        $client_id      = $config['gh']['client_id'];
+        $redirect_uri   = $config['gh']['client_secret'];
+
+        $github = new Github();
 
         try {
 
-            Github::class->authorizeUrl($client_id, $redirect_uri);
+            $github->getAuthorizeUrl($client_id, $redirect_uri);
 
         } catch (Exception $error) {
 
