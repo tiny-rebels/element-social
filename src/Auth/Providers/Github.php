@@ -47,7 +47,7 @@ class Github extends Service {
 
         try {
 
-            $response = $this->client->request('GET', 'https://github.com/login/oauth/access_token', [
+            $response = $this->httpClient->request('GET', 'https://github.com/login/oauth/access_token', [
                 'headers' => [
                     'accept' => 'application/json',
                 ],
@@ -72,7 +72,7 @@ class Github extends Service {
 
         try {
 
-            $response = $this->client->request('GET', 'https://api.github.com/user', [
+            $response = $this->httpClient->request('GET', 'https://api.github.com/user', [
                 'headers' => [
                     "Authorization" => "Bearer " . $token
                 ],
