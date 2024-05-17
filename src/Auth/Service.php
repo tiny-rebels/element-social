@@ -7,27 +7,30 @@ use GuzzleHttp\Client as HttpClient;
 abstract class Service {
 
     /**
-     * BaseController dependencies
+     * Service dependencies
      */
     protected HttpClient $httpClient;
+    protected array $config;
 
     /**
-     * BaseController constructor.
+     * Service constructor.
      *
      * @param HttpClient $httpClient
+     * @param array $config
      */
-    public function __construct(HttpClient $httpClient) {
+    public function __construct(HttpClient $httpClient, array $config) {
 
-        $this->httpClient = $httpClient;
+        $this->httpClient   = $httpClient;
+        $this->config       = $config;
     }
 
-    abstract public function getAuthorizeUrl($client_id, $redirect_uri);
+    abstract public function getAuthorizeUrl();
 
     abstract public function getUserByCode($code);
 
-    public function authorizeUrl($client_id, $redirect_uri) {
+    public function authorizeUrl() {
 
-        return $this->getAuthorizeUrl($client_id, $redirect_uri);
+        return $this->getAuthorizeUrl();
     }
 
     public function getUser($code) {
