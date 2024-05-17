@@ -21,7 +21,7 @@ class Facebook extends Service {
         try {
 
             return "https://www.facebook.com/dialog/oauth"
-                . "?client_id=" . $this->config['client_id']
+                . "?client_id=" . $this->config['app_id']
                 . "&redirect_uri=" . $this->config['redirect_uri']
                 . "&scope=email,public_profile"
                 . "&state=" . bin2hex(random_bytes(16));
@@ -50,8 +50,8 @@ class Facebook extends Service {
 
             $response = $this->httpClient->request('GET', 'https://graph.facebook.com/v2.3/oauth/access_token', [
                 'query' => [
-                    'client_id'     => $this->config['client_id'],
-                    'client_secret' => $this->config['client_secret'],
+                    'client_id'     => $this->config['app_id'],
+                    'client_secret' => $this->config['app_secret'],
                     'redirect_uri'  => $this->config['redirect_uri'],
                     'code' => $code,
                 ]
