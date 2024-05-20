@@ -7,11 +7,11 @@ use GuzzleHttp\Exception\GuzzleException;
 
 /*
  * |--------------------------------------------------------------------------------------------|
- * | Visit the official docs :                                                                  |
- * | https://github.com/settings/developers                                                     |
+ * | Visit the official docs                                                                    |
+ * | https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow   |
  * |--------------------------------------------------------------------------------------------|
  */
-class Github extends Service {
+class Microsoft extends Service {
 
     /**
      * @return string
@@ -20,12 +20,14 @@ class Github extends Service {
 
         try {
 
-            return "https://github.com/login/oauth/authorize"
+            return "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize"
                 . "?client_id="
                 . $this->config['client_id']
+                . "&response_type=code"
                 . "&redirect_uri="
                 . $this->config['redirect_uri']
-                . "&scopes="
+                . "&response_mode=query"
+                . "&scope="
                 . $this->config['scopes']
                 . "&state=" . bin2hex(random_bytes(16));
 
@@ -51,15 +53,17 @@ class Github extends Service {
 
         try {
 
-            $response = $this->httpClient->request('GET', 'https://github.com/login/oauth/access_token', [
+            $response = $this->httpClient->request('POST', 'https://login.microsoftonline.com/consumers/oauth2/v2.0/token', [
                 'headers' => [
-                    'accept' => 'application/json',
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
-                'query' => [
+                'form_params' => [
+                    'tenant'        => $this->config['tenant'],
+                    'grant_type'    => 'authorization_code',
                     'client_id'     => $this->config['client_id'],
                     'client_secret' => $this->config['client_secret'],
                     'redirect_uri'  => $this->config['redirect_uri'],
-                    'code'          => $code,
+                    'code'          => $code
                 ]
             ])->getBody();
 
@@ -77,10 +81,10 @@ class Github extends Service {
 
         try {
 
-            $response = $this->httpClient->request('GET', 'https://api.github.com/user', [
+            $response = $this->httpClient->request('GET', 'https://graph.microsoft.com/v1.0/me', [
                 'headers' => [
                     "Authorization" => "Bearer " . $token
-                ],
+                ]
             ])->getBody();
 
         } catch (GuzzleException $error) {
@@ -103,10 +107,10 @@ class Github extends Service {
         return (object) [
 
             'uid'       => $user->id,
-            'username'  => $user->login,
-            'name'      => $user->name,
-            'email'     => $user->email,
-            'photo'     => $user->avatar_url,
+            'username'  => null,
+            'name'      => $user->displayName,
+            'email'     => $user->userPrincipalName,
+            'photo'     => 'src/Assets/img_user_default.png',
         ];
     }
 }

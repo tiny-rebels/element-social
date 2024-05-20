@@ -2,31 +2,30 @@
 
 namespace Element\Social\Auth;
 
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as HttpClient;
 
-abstract class Service
-{
+abstract class Service {
 
     /**
-     * The client instance.
-     *
-     * @var Client
+     * Service dependencies
      */
-    protected $client;
+    protected HttpClient $httpClient;
+    protected array $config;
 
     /**
      * Service constructor.
      *
-     * @param Client $client
+     * @param HttpClient $httpClient
      * @param array $config
      */
-    public function __construct(Client $client, $config) {
+    public function __construct(HttpClient $httpClient, array $config) {
 
-        $this->client = $client;
-        $this->config = $config;
+        $this->httpClient   = $httpClient;
+        $this->config       = $config;
     }
 
     abstract public function getAuthorizeUrl();
+
     abstract public function getUserByCode($code);
 
     public function authorizeUrl() {

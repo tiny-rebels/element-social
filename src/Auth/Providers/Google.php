@@ -8,10 +8,10 @@ use GuzzleHttp\Exception\GuzzleException;
 /*
  * |--------------------------------------------------------------------------------------------|
  * | Visit the official docs :                                                                  |
- * | https://github.com/settings/developers                                                     |
+ * | https://developers.google.com/identity/protocols/oauth2/openid-connect#createxsrftoken     |
  * |--------------------------------------------------------------------------------------------|
  */
-class Github extends Service {
+class Google extends Service {
 
     /**
      * @return string
@@ -20,14 +20,16 @@ class Github extends Service {
 
         try {
 
-            return "https://github.com/login/oauth/authorize"
-                . "?client_id="
+            return "https://accounts.google.com/o/oauth2/v2/auth"
+                . "?response_type=code"
+                . "&client_id="
                 . $this->config['client_id']
+                . "&scope="
+                . $this->config['scopes']
                 . "&redirect_uri="
                 . $this->config['redirect_uri']
-                . "&scopes="
-                . $this->config['scopes']
-                . "&state=" . bin2hex(random_bytes(16));
+                . "&state=" . bin2hex(random_bytes(16))
+                . "&nonce=" . bin2hex(random_bytes(16));
 
         } catch (\Exception $error) {
 
@@ -51,15 +53,16 @@ class Github extends Service {
 
         try {
 
-            $response = $this->httpClient->request('GET', 'https://github.com/login/oauth/access_token', [
+            $response = $this->httpClient->request('POST', 'https://oauth2.googleapis.com/token', [
                 'headers' => [
-                    'accept' => 'application/json',
+                    'Content-Type' => 'application/x-www-form-urlencoded',
                 ],
-                'query' => [
+                'form_params' => [
+                    'code'          => $code,
                     'client_id'     => $this->config['client_id'],
                     'client_secret' => $this->config['client_secret'],
                     'redirect_uri'  => $this->config['redirect_uri'],
-                    'code'          => $code,
+                    'grant_type'    => 'authorization_code'
                 ]
             ])->getBody();
 
@@ -77,10 +80,10 @@ class Github extends Service {
 
         try {
 
-            $response = $this->httpClient->request('GET', 'https://api.github.com/user', [
+            $response = $this->httpClient->request('GET', 'https://openidconnect.googleapis.com/v1/userinfo', [
                 'headers' => [
                     "Authorization" => "Bearer " . $token
-                ],
+                ]
             ])->getBody();
 
         } catch (GuzzleException $error) {
@@ -102,11 +105,11 @@ class Github extends Service {
 
         return (object) [
 
-            'uid'       => $user->id,
-            'username'  => $user->login,
+            'uid'       => $user->sub,
+            'username'  => null,
             'name'      => $user->name,
             'email'     => $user->email,
-            'photo'     => $user->avatar_url,
+            'photo'     => $user->picture,
         ];
     }
 }

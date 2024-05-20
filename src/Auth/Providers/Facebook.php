@@ -8,10 +8,10 @@ use GuzzleHttp\Exception\GuzzleException;
 /*
  * |--------------------------------------------------------------------------------------------|
  * | Visit the official docs :                                                                  |
- * | https://github.com/settings/developers                                                     |
+ * | https://developers.facebook.com/apps/                                                      |
  * |--------------------------------------------------------------------------------------------|
  */
-class Github extends Service {
+class Facebook extends Service {
 
     /**
      * @return string
@@ -20,12 +20,12 @@ class Github extends Service {
 
         try {
 
-            return "https://github.com/login/oauth/authorize"
+            return "https://www.facebook.com/dialog/oauth"
                 . "?client_id="
-                . $this->config['client_id']
+                . $this->config['app_id']
                 . "&redirect_uri="
                 . $this->config['redirect_uri']
-                . "&scopes="
+                . "&scope="
                 . $this->config['scopes']
                 . "&state=" . bin2hex(random_bytes(16));
 
@@ -51,15 +51,12 @@ class Github extends Service {
 
         try {
 
-            $response = $this->httpClient->request('GET', 'https://github.com/login/oauth/access_token', [
-                'headers' => [
-                    'accept' => 'application/json',
-                ],
+            $response = $this->httpClient->request('GET', 'https://graph.facebook.com/v2.3/oauth/access_token', [
                 'query' => [
-                    'client_id'     => $this->config['client_id'],
-                    'client_secret' => $this->config['client_secret'],
+                    'client_id'     => $this->config['app_id'],
+                    'client_secret' => $this->config['app_secret'],
                     'redirect_uri'  => $this->config['redirect_uri'],
-                    'code'          => $code,
+                    'code' => $code,
                 ]
             ])->getBody();
 
@@ -77,9 +74,10 @@ class Github extends Service {
 
         try {
 
-            $response = $this->httpClient->request('GET', 'https://api.github.com/user', [
-                'headers' => [
-                    "Authorization" => "Bearer " . $token
+            $response = $this->httpClient->request('GET', 'https://graph.facebook.com/me', [
+                'query' => [
+                    'access_token' => $token,
+                    'fields' => 'id,name,email,picture'
                 ],
             ])->getBody();
 
@@ -103,10 +101,10 @@ class Github extends Service {
         return (object) [
 
             'uid'       => $user->id,
-            'username'  => $user->login,
+            'username'  => $user->id,
             'name'      => $user->name,
             'email'     => $user->email,
-            'photo'     => $user->avatar_url,
+            'photo'     => $user->picture->data->url,
         ];
     }
 }
