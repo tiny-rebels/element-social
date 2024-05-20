@@ -22,11 +22,12 @@ class Linkedin extends Service {
 
             return "https://www.linkedin.com/oauth/v2/authorization"
                 . "?response_type=code"
-                . "&client_id=" . $this->config['client_id']
-                . "&redirect_uri=" . $this->config['redirect_uri']
-                . "&scope=r_liteprofile%20r_emailaddress"
-                //. "&scope=r_liteprofile%20r_emailaddress%20w_member_social"
-                //. "&scope=r_basicprofile%20r_emailaddress"
+                . "&client_id="
+                . $this->config['client_id']
+                . "&redirect_uri="
+                . $this->config['redirect_uri']
+                . "&scope="
+                . $this->config['scopes']
                 . "&state=" . bin2hex(random_bytes(16));
 
         } catch (\Exception $error) {

@@ -22,9 +22,12 @@ class Google extends Service {
 
             return "https://accounts.google.com/o/oauth2/v2/auth"
                 . "?response_type=code"
-                . "&client_id=" . $this->config['client_id']
-                . "&scope=openid%20profile%20email"
-                . "&redirect_uri=" . $this->config['redirect_uri']
+                . "&client_id="
+                . $this->config['client_id']
+                . "&scope="
+                . $this->config['scopes']
+                . "&redirect_uri="
+                . $this->config['redirect_uri']
                 . "&state=" . bin2hex(random_bytes(16))
                 . "&nonce=" . bin2hex(random_bytes(16));
 

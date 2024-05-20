@@ -20,11 +20,13 @@ class Github extends Service {
 
         try {
 
-            return "https://github.com/login/oauth/authorize?client_id="
+            return "https://github.com/login/oauth/authorize"
+                . "?client_id="
                 . $this->config['client_id']
                 . "&redirect_uri="
                 . $this->config['redirect_uri']
-                . "&scopes=user,user:email"
+                . "&scopes="
+                . $this->config['scopes']
                 . "&state=" . bin2hex(random_bytes(16));
 
         } catch (\Exception $error) {

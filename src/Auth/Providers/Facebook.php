@@ -21,9 +21,12 @@ class Facebook extends Service {
         try {
 
             return "https://www.facebook.com/dialog/oauth"
-                . "?client_id=" . $this->config['app_id']
-                . "&redirect_uri=" . $this->config['redirect_uri']
-                . "&scope=email,public_profile"
+                . "?client_id="
+                . $this->config['app_id']
+                . "&redirect_uri="
+                . $this->config['redirect_uri']
+                . "&scope="
+                . $this->config['scopes']
                 . "&state=" . bin2hex(random_bytes(16));
 
         } catch (\Exception $error) {

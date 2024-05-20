@@ -21,11 +21,14 @@ class Microsoft extends Service {
         try {
 
             return "https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize"
-                . "?client_id=" . $this->config['client_id']
+                . "?client_id="
+                . $this->config['client_id']
                 . "&response_type=code"
-                . "&redirect_uri=" . $this->config['redirect_uri']
+                . "&redirect_uri="
+                . $this->config['redirect_uri']
                 . "&response_mode=query"
-                . "&scope=User.Read User.ReadBasic.All openid"
+                . "&scope="
+                . $this->config['scopes']
                 . "&state=" . bin2hex(random_bytes(16));
 
         } catch (\Exception $error) {
