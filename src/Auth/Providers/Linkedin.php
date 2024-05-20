@@ -72,7 +72,9 @@ class Linkedin extends Service {
 
         }
 
-        return json_decode($response);
+        $authObject = json_decode($response);
+
+        return $authObject->access_token;
     }
 
     protected function getUserByToken($token) {
