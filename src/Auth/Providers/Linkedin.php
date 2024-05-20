@@ -6,10 +6,10 @@ use Element\Social\Auth\Service;
 use GuzzleHttp\Exception\GuzzleException;
 
 /*
- * |--------------------------------------------------------------------------------------------|
- * | Visit the official docs :                                                                  |
- * | ?                                                                                          |
- * |--------------------------------------------------------------------------------------------|
+ * |----------------------------------------------------------------------------------------------------------------------------|
+ * | Visit the official docs :                                                                                                  |
+ * | https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin?source=recommendations   |
+ * |----------------------------------------------------------------------------------------------------------------------------|
  */
 class Linkedin extends Service {
 
@@ -79,30 +79,11 @@ class Linkedin extends Service {
 
         try {
 
-            $r_lite = $this->httpClient->request('GET', 'https://api.linkedin.com/v2/me', [
+            $response = $this->httpClient->request('GET', 'https://api.linkedin.com/v2/userinfo', [
                 'headers' => [
-                    "Authorization" => "Bearer " . $token->access_token,
-                    "Content-Type"  => "application/json",
-                    "x-li-format"   =>"json"
+                    "Authorization" => "Bearer " . $token
                 ],
             ])->getBody();
-
-            $userProfile = json_decode($r_lite);
-
-            $r_emailaddress = $this->httpClient->request('GET', 'https://api.linkedin.com/v2/clientAwareMemberHandles?q=members&projection=(elements*(primary,EMAIL,handle~))', [
-                'headers' => [
-                    "Authorization" => "Bearer " . $token->access_token,
-                    "Content-Type"  => "application/json",
-                    "x-li-format"   =>"json"
-                ],
-            ])->getBody();
-
-            $userEmail = json_decode($r_emailaddress);
-
-            $user = (object) [
-                "r_lite"            => $userProfile,
-                "r_emailaddress"    => $userEmail->elements[0]
-            ];
 
         } catch (GuzzleException $error) {
 
@@ -111,7 +92,7 @@ class Linkedin extends Service {
 
         }
 
-        return $user;
+        return json_decode($response);
     }
 
     /**
@@ -120,6 +101,12 @@ class Linkedin extends Service {
      * @return object
      */
     protected function normalizeUser($user): object {
+
+        // TODO : Vi skal have mappet værdierne korrekt her!
+
+        dump("normalizeUser: ");
+        dump($user);
+        die;
 
         return (object) [
 
