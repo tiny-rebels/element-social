@@ -104,19 +104,13 @@ class Linkedin extends Service {
      */
     protected function normalizeUser($user): object {
 
-        // TODO : Vi skal have mappet værdierne korrekt her!
-
-        dump("normalizeUser: ");
-        dump($user);
-        die;
-
         return (object) [
 
-            'uid'       => $user->r_lite->id,
-            'username'  => 'TODO',
-            'name'      => $user->r_lite->localizedFirstName . " " . $user->r_lite->localizedLastName,
-            'email'     => $user->r_emailaddress->{"handle~"}->emailAddress,
-            'photo'     => 'src/Assets/img_user_default.png',
+            'uid'       => $user->sub,
+            'username'  => $user->family_name,
+            'name'      => $user->name,
+            'email'     => $user->email,
+            'photo'     => $user->picture,
         ];
     }
 }
